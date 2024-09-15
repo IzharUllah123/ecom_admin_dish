@@ -1,4 +1,4 @@
 const mongoose=require("mongoose");
-
+require('dotenv').config()
 // First Connect mongoose 
-mongoose.connect('mongodb://127.0.0.1:27017/E-comm');
+mongoose.connect(process.env.MONGO_URL);

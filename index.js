@@ -7,7 +7,7 @@ const path=require("path");
 require('./db/config');
 const Jwt=require('jsonwebtoken');
 const jwtKey='e-comm'
-
+require ("dotenv").config
 // Control data that we send from postman etc
 app.use(express.json());
 app.use(cors());
@@ -21,7 +21,7 @@ let result=await user.save()
 
 // resp.send(result)
 
-Jwt.sign({user},jwtKey,(err,token)=>{
+Jwt.sign({user},process.env.SECTRET_KEY,(err,token)=>{
   if (err){
     resp.send({result:"Something Went wrong"})
   }
@@ -38,7 +38,7 @@ if(req.body.password && req.body.email){
   const user=await User.findOne(req.body).select("-password");
   if(user){
     
-    Jwt.sign({user},jwtKey,(err,token)=>{
+    Jwt.sign({user},process.env.SECTRET_KEY,(err,token)=>{
       if (err){
         resp.send("Something Went wrong")
       }
@@ -123,10 +123,10 @@ app.get('/search/:key',verifyToken,async(req,resp)=>{
 
 // for deploying
 
-app.get("/",(req,res)=>{
-  app.use(express.static(path.resolve(__dirname,"front-end","build")));
-  res.sendFile(path.resolve(__dirname,"front-end","build","index.html"));
-})
+// app.get("/",(req,res)=>{
+//   app.use(express.static(path.resolve(__dirname,"front-end","build")));
+//   res.sendFile(path.resolve(__dirname,"front-end","build","index.html"));
+// })
 
 function verifyToken(req,resp,next){
   let token=req.headers['authorization'];
